@@ -23,6 +23,7 @@
 
 extern int iBand_Fast = 20;
 extern int iBand_Slow = 175;
+extern int deviation = 1;
 
 //--- indicator buffers
 double         bFast_up[];
@@ -108,10 +109,10 @@ int OnCalculate(const int rates_total,
    for(i=0; i<limit; i++)
      {
       //---CALCULATE INDICATOR LINES
-      bFast_up[i]=iBands(NULL,0,iBand_Fast,2,0,PRICE_CLOSE,MODE_UPPER,i);
-      bFast_down[i]=iBands(NULL,0,iBand_Fast,2,0,PRICE_CLOSE,MODE_LOWER,i);
-      bSlow_up[i]=iBands(NULL,0,iBand_Slow,2,0,PRICE_CLOSE,MODE_UPPER,i);
-      bSlow_down[i]=iBands(NULL,0,iBand_Slow,2,0,PRICE_CLOSE,MODE_LOWER,i);
+      bFast_up[i]=iBands(NULL,0,iBand_Fast,deviation,0,PRICE_CLOSE,MODE_UPPER,i);
+      bFast_down[i]=iBands(NULL,0,iBand_Fast,deviation,0,PRICE_CLOSE,MODE_LOWER,i);
+      bSlow_up[i]=iBands(NULL,0,iBand_Slow,2,deviation,PRICE_CLOSE,MODE_UPPER,i);
+      bSlow_down[i]=iBands(NULL,0,iBand_Slow,deviation,0,PRICE_CLOSE,MODE_LOWER,i);
 
       //--CALCULATE BUY/SELL SIGNAL LINES
       // DrawSignalArrows(i);
