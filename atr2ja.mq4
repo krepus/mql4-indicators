@@ -239,6 +239,7 @@ void drawLongArrow(int i)
    ObjectSet(ObjName,OBJPROP_ARROWCODE,233);
    ObjectSet(ObjName,OBJPROP_COLOR,clrBlue);
    DNobjCount++;
+   SendNotification("LONG SIGNAL COMING UP!!!");
    Alert("BUY SIGNAL !!!");
 
   }
@@ -258,7 +259,9 @@ void drawShortArrow(int i)
 //ObjectSet(ObjName,OBJPROP_STYLE,STYLE_SOLID); 
 
    DNobjCount++;
+   SendNotification("SHORT SIGNAL COMING UP!!!");
    Alert("SHORT SIGNAL !!!");
+   
   }
 //+------------------------------------------------------------------+
 void deinit()
