@@ -41,11 +41,11 @@ int OnInit(void)
 
 //---- indicators
    SetIndexBuffer(0,TrendUp);
-   SetIndexStyle(0,DRAW_LINE,STYLE_DOT,1,clrBlue);
+   SetIndexStyle(0,DRAW_LINE,STYLE_DOT,2,clrBlue);
    SetIndexLabel(0,"Trend Up");
 
    SetIndexBuffer(1,TrendDown);
-   SetIndexStyle(1,DRAW_LINE,STYLE_DOT,1,clrOrangeRed);
+   SetIndexStyle(1,DRAW_LINE,STYLE_DOT,2,clrOrangeRed);
    SetIndexLabel(1,"Trend Down");
 
    SetIndexBuffer(2,UpBuffer);
