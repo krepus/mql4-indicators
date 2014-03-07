@@ -59,11 +59,11 @@ int OnInit(void)
    SetIndexLabel(3,"Down Signal");
 
 //additional buffers
-   SetIndexStyle(4,DRAW_LINE,STYLE_DOT,1,clrYellow);
+   SetIndexStyle(4,DRAW_LINE,STYLE_DOT,1,clrGray);
    SetIndexBuffer(4,upperATR);
    SetIndexLabel(4,"upper range");
 
-   SetIndexStyle(5,DRAW_LINE,STYLE_DOT,1,clrYellow);
+   SetIndexStyle(5,DRAW_LINE,STYLE_DOT,1,clrGray);
    SetIndexBuffer(5,lowerATR);
    SetIndexLabel(5,"Lower range");
 
@@ -96,11 +96,11 @@ int OnCalculate(const int rates_total,
 //double medianPrice,atr;
 
 //int counted_bars=IndicatorCounted();
-   int counted_bars=prev_calculated;
-   if(counted_bars < 0)  return(-1);
-   if(counted_bars>0) counted_bars--;
-   int limit=rates_total-counted_bars;
-   if(counted_bars==0) limit-=1+1;
+//   int counted_bars=prev_calculated;
+//   if(counted_bars < 0)  return(-1);
+//   if(counted_bars>0) counted_bars--;
+//   int limit=rates_total-counted_bars;
+//   if(counted_bars==0) limit-=1+1;
 
 //Print(limit);
 
@@ -109,7 +109,8 @@ int OnCalculate(const int rates_total,
    ArrayResize(up,size);
    ArrayResize(dn,size);
 //----
-   for(i=limit; i>=1; i--)
+   int limit=rates_total-prev_calculated-1;
+   for(i=limit-1; i>=0; i--)
      {
 
       TrendUp[i]=EMPTY_VALUE;
@@ -217,10 +218,10 @@ int OnCalculate(const int rates_total,
         }
 
       //additional buffers
-      double iatr=iATR(NULL,PERIOD_H12,Nbr_Periods,i);
+      double iatr=iATR(NULL,PERIOD_H4,Nbr_Periods,i);
       upperATR[i]=medianPrice + iatr;
       lowerATR[i]=medianPrice-iatr;
-      Print(StringConcatenate("i = ", i, "iatr = ", DoubleToStr(iatr)) );
+      // Print(StringConcatenate("i = ",i,"iatr = ",DoubleToStr(iatr)));
 
       //end additional buffers
 

@@ -59,11 +59,11 @@ int OnCalculate(const int rates_total,
    for(int i=limit; i>=0; i--)
      {
       //--- ma_shift set to 0 because SetIndexShift called abowe
-      double iatr=iATR(NULL,PERIOD_H4,avg_period,i);
+      double iatr=iATR(NULL,PERIOD_D1,avg_period,i);
       double medianPrice=0.5*(high[i]+low[i]);
       atr_highBuffer[i]= medianPrice+iatr*0.5;
       atr_lowBuffer[i] = medianPrice-iatr*0.5;
-      Print(" iatr[i] = ",iatr);
+      //Print(" iatr[i] = ",iatr);
      }
 
 //--- return value of prev_calculated for next call

@@ -16,119 +16,133 @@
 #property indicator_color2 Aqua
 #property indicator_color3 OrangeRed
 
-extern bool UseClose = true;
-extern int  barsToCount=50;
+extern bool UseClose=true;
+extern int  barsToCount=100;
+input int timeConst=PERIOD_H4;
 
 double LR_line[];
 double Sup_line[];
 double Res_line[];
-
 //////////////////////////////////////////////////////////////////////
 int init()
-{
-   //IndicatorShortName("LinearRegressionChannel:"+barsToCount);
+  {
+//IndicatorShortName("LinearRegressionChannel:"+barsToCount);
    SetIndexStyle(0,DRAW_LINE);
    SetIndexBuffer(0,LR_line);
    SetIndexEmptyValue(0,0.0);
-   
+
    SetIndexStyle(1,DRAW_LINE);
    SetIndexBuffer(1,Sup_line);
    SetIndexEmptyValue(1,0.0);
-   
+
    SetIndexStyle(2,DRAW_LINE);
    SetIndexBuffer(2,Res_line);
    SetIndexEmptyValue(2,0.0);
-   
-   
-   return(0);
-}
 
+   //barsToCount=barsToCount *getH4time();
+
+   return(0);
+  }
 //////////////////////////////////////////////////////////////////////
 int deinit()
-{  
+  {
    return(0);
-}
-
+  }
 //////////////////////////////////////////////////////////////////////
 int start()
-{
-   // variables
+  {
+// variables
    double a,b,c,
-          sumy=0.0,
-          sumx=0.0,
-          sumxy=0.0,
-          sumx2=0.0,
-          h=0.0,l=0.0;   
+   sumy=0.0,
+   sumx=0.0,
+   sumxy=0.0,
+   sumx2=0.0,
+   h=0.0,l=0.0;
    int x;
-   
-   // calculate linear regression
-   
+
+// calculate linear regression
+
    for(int i=0; i<barsToCount; i++)
-   {
+     {
       sumy+=Close[i];
       sumxy+=Close[i]*i;
       sumx+=i;
       sumx2+=i*i;
-   }
-   
+     }
+
    c=sumx2*barsToCount-sumx*sumx;
-   
+
    if(c==0.0)
-   {
+     {
       Alert("Error in linear regression!");
       return 0;
-   }
-   
-   
-   // Line equation    
+     }
+
+// Line equation    
    b=(sumxy*barsToCount-sumx*sumy)/c;
    a=(sumy-sumx*b)/barsToCount;
-   
-   // Linear regression line in buffer
+
+// Linear regression line in buffer
    for(x=0;x<barsToCount;x++)
       LR_line[x]=a+b*x;
-   
-   
 
-   
-   // Use PRICE_CLOSE for support-resistance
-   if (UseClose)
-     for(x=0;x<barsToCount;x++)
-     {
-       if(Close[x]-LR_line[x] > h) h = Close[x]-LR_line[x];
-       if(LR_line[x] - Close[x]> l) l = LR_line[x] - Close[x];
-     }  
-   
-   // Use HIGH - LOW
+// Use PRICE_CLOSE for support-resistance
+   if(UseClose)
+      for(x=0;x<barsToCount;x++)
+        {
+         if(Close[x]-LR_line[x]>h) h = Close[x]-LR_line[x];
+         if(LR_line[x]-Close[x]>l) l = LR_line[x] - Close[x];
+        }
+
+// Use HIGH - LOW
    else
-     for(x=0;x<barsToCount;x++)
+   for(x=0;x<barsToCount;x++)
      {
-       if(High[x]-LR_line[x] > h) h = High[x]-LR_line[x];
-       if(LR_line[x] - Low[x]> l) l = LR_line[x] - Low[x];
+      if(High[x]-LR_line[x] > h) h = High[x]-LR_line[x];
+      if(LR_line[x] - Low[x]> l) l = LR_line[x] - Low[x];
      }
-   
-   // Drawing support - resistance lines   
-   if (h>l)
-   {
-     for(x=0;x<barsToCount;x++)
+
+// Drawing support - resistance lines   
+   if(h>l)
      {
-       Sup_line[x]=a-h+b*x;
-       Res_line[x]=a+h+b*x;
-     } 
-   }
+      for(x=0;x<barsToCount;x++)
+        {
+         Sup_line[x]=a-h+b*x;
+         Res_line[x]=a+h+b*x;
+        }
+     }
    else
-   {
-     for(x=0;x<barsToCount;x++)
      {
-       Sup_line[x]=a-l+b*x;
-       Res_line[x]=a+l+b*x;
+      for(x=0;x<barsToCount;x++)
+        {
+         Sup_line[x]=a-l+b*x;
+         Res_line[x]=a+l+b*x;
+        }
      }
-   }
-   
+
    LR_line[x]  = 0.0;
    Sup_line[x] = 0.0;
    Res_line[x] = 0.0;
 
-   return(0);
-}
+   //Print("getH4time() = ",getH4time());
 
+   return(0);
+  }
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+int getH4time()
+  {
+
+   int currentTF=Period();
+   if(currentTF < 2) return timeConst;
+   else if(currentTF < 6) return timeConst/5;
+   else if( currentTF < 16) return timeConst/15;
+   else if( currentTF < 31) return timeConst/30;
+   else if(currentTF < 61) return timeConst/60;
+   else if(currentTF < 241) return 1;
+   else if(currentTF< 1441) return timeConst/1440;
+   else return 0;
+
+  }
+//+------------------------------------------------------------------+
