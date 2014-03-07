@@ -101,7 +101,7 @@ int OnCalculate(const int rates_total,
    ArrayResize(up,size);
    ArrayResize(dn,size);
 
-   int limit=rates_total-prev_calculated-2;
+   int limit=rates_total-prev_calculated-1;
 //--- main loop
    for(int j=limit; j>0; j--)
      {
@@ -112,7 +112,7 @@ int OnCalculate(const int rates_total,
       atr_lowBuffer[j] = medianPrice-iatr*0.5;
       //Print(" iatr[i] = ",iatr);
 
-      int i=j;
+      int i=j-1;
       TrendUp[i]=EMPTY_VALUE;
       TrendDown[i]=EMPTY_VALUE;
       //iatr=iATR(NULL,0,Nbr_Periods,i);
