@@ -34,22 +34,12 @@
 #property indicator_color4  clrOrangeRed
 #property indicator_style4  STYLE_SOLID
 #property indicator_width4  2 
-////---plot UpSignal
-//#property indicator_label5  "Up Signal"
-//#property indicator_type5   DRAW_ARROW
-//#property indicator_color5  clrBlue
-//#property indicator_style5  STYLE_SOLID
-//#property indicator_width5  1
-////---plot DownSignal
-//#property indicator_label6  "Down Signal"
-//#property indicator_type6   DRAW_ARROW
-//#property indicator_color6  clrRed
-//#property indicator_style6  STYLE_SOLID
-//#property indicator_width6  1
+
 
 //--- input parameters 
 input int      avg_period=10;//number of H4 bars to average
 input double   Multiplier=1.0;//multiplier, leave as default
+input bool     AlertOn=false;//Enable/disable alerts
 //--- indicator buffers
 double         atr_highBuffer[];
 double         atr_lowBuffer[];
@@ -111,21 +101,8 @@ int OnCalculate(const int rates_total,
       double    medianPrice=0.5*(high[i]+low[i]);
       atr_highBuffer[i]= medianPrice+iatr*0.5;
       atr_lowBuffer[i] = medianPrice-iatr*0.5;
-      //Print(" iatr[i] = ",iatr);
-
-      
-      TrendUp[i]=EMPTY_VALUE;
-      TrendDown[i]=EMPTY_VALUE;
-      //iatr=iATR(NULL,0,Nbr_Periods,i);
-      //Print("atr: "+atr[i]);
-      medianPrice=(high[i]+low[i])/2;
-      //Print("medianPrice: "+medianPrice[i]);
       up[i]=medianPrice+(Multiplier*iatr);
-
-      //Print("up: "+up[i]);
       dn[i]=medianPrice-(Multiplier*iatr);
-      //lowerATR[i]=dn[i];
-      //Print("dn: "+dn[i]);
       trend[i]=1;
 
       if(Close[i]>up[i+1])
@@ -240,8 +217,13 @@ void drawLongArrow(int i)
    ObjectSet(ObjName,OBJPROP_ARROWCODE,233);
    ObjectSet(ObjName,OBJPROP_COLOR,clrBlue);
    DNobjCount++;
-   SendNotification("LONG SIGNAL COMING UP!!!");
-   Alert("BUY SIGNAL !!!");
+
+//alert
+   if(AlertOn)
+     {
+      SendNotification("LONG SIGNAL COMING UP!!!");
+      Alert("BUY SIGNAL !!!");
+     }
 
   }
 //+------------------------------------------------------------------+
@@ -260,9 +242,13 @@ void drawShortArrow(int i)
 //ObjectSet(ObjName,OBJPROP_STYLE,STYLE_SOLID); 
 
    DNobjCount++;
-   SendNotification("SHORT SIGNAL COMING UP!!!");
-   Alert("SHORT SIGNAL !!!");
-   
+
+   if(AlertOn)
+     {
+      SendNotification("SHORT SIGNAL COMING UP!!!");
+      Alert("SHORT SIGNAL !!!");
+     }
+
   }
 //+------------------------------------------------------------------+
 void deinit()

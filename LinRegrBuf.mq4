@@ -17,8 +17,11 @@
 #property indicator_color3 OrangeRed
 
 extern bool UseClose=true;
-extern int  barsToCount=100;
-input int timeConst=PERIOD_H4;
+extern int  barsToCount=24; //suitable number of M30 bars
+
+
+
+int timeConst=PERIOD_H4;
 
 double LR_line[];
 double Sup_line[];
@@ -141,7 +144,7 @@ int getH4time()
    else if( currentTF < 31) return timeConst/30;
    else if(currentTF < 61) return timeConst/60;
    else if(currentTF < 241) return 1;
-   else if(currentTF< 1441) return timeConst/1440;
+   else if(currentTF < 1441) return timeConst/1440;
    else return 0;
 
   }
