@@ -93,10 +93,10 @@ int OnCalculate(const int rates_total,
 
    int limit=rates_total-prev_calculated-1;
 //--- main loop
-   for(int j=limit; j>0; j--)
+   for(int j=limit; j>=0; j--)
      {
       //--- ma_shift set to 0 because SetIndexShift called abowe
-      int i=j-1;
+      int i=MathMax(j-1,0);
       double iatr=iATR(NULL,PERIOD_H4,avg_period,i);
       double    medianPrice=0.5*(high[i]+low[i]);
       atr_highBuffer[i]= medianPrice+iatr*0.5;
@@ -198,6 +198,7 @@ int OnCalculate(const int rates_total,
         }
       //Print("low[i] = ",low[i]);
       //Print("high[i] = ",high[i]);
+      Print("i = ",i,"liimit = ",limit,"previouscalculted = ",prev_calculated);
      }
 
 //--- return value of prev_calculated for next call
